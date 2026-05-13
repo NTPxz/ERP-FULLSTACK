@@ -1,29 +1,53 @@
-# Go Example Project — CRUD + JWT Auth
+# ERP Fullstack
+
+ระบบ ERP แบบ Fullstack ประกอบด้วย Go (Fiber) backend และ React (TypeScript) frontend
 
 ## Project Structure
+
 ```
-go-example/
-├── main.go               ← entry point, wire dependencies
-├── .env.example          ← copy เป็น .env
-├── config/
-│   └── config.go         ← load env, connect DB
-├── model/
-│   └── user.go           ← struct + DTO
-├── repository/
-│   └── user_repository.go ← DB queries (interface + impl)
-├── service/
-│   └── user_service.go   ← business logic
-├── handler/
-│   └── user_handler.go   ← HTTP handlers
-├── middleware/
-│   └── auth.go           ← JWT middleware
-└── router/
-    └── router.go         ← route definitions
+erp-fullstack/
+├── backend/          ← Go API server (Fiber + GORM + SQLite)
+│   ├── cmd/server/
+│   │   └── main.go
+│   ├── internal/
+│   │   ├── config/
+│   │   ├── handler/
+│   │   ├── middleware/
+│   │   ├── model/
+│   │   ├── repository/
+│   │   ├── router/
+│   │   └── service/
+│   ├── docs/         ← Swagger generated docs
+│   ├── go.mod
+│   └── .env.example
+└── frontend/         ← React + TypeScript (Vite)
+    ├── src/
+    │   ├── api/
+    │   ├── components/
+    │   ├── context/
+    │   ├── hooks/
+    │   ├── pages/
+    │   └── types/
+    ├── package.json
+    └── vite.config.ts
 ```
+
+## Tech Stack
+
+| Layer    | Technology                          |
+|----------|-------------------------------------|
+| Backend  | Go, Fiber v2, GORM, SQLite, JWT     |
+| Frontend | React 18, TypeScript, Vite, Axios   |
+| Docs     | Swagger / swaggo                    |
+| Test     | testify (backend), Vitest (frontend)|
 
 ## วิธีรัน
 
+### Backend
+
 ```bash
+cd backend
+
 # 1. copy env
 cp .env.example .env
 
@@ -31,44 +55,39 @@ cp .env.example .env
 go mod tidy
 
 # 3. run
-go run main.go
+go run cmd/server/main.go
 ```
+
+Server จะรันที่ `http://localhost:8080`
+Swagger UI: `http://localhost:8080/swagger/index.html`
+
+### Frontend
+
+```bash
+cd frontend
+
+# 1. install dependencies
+npm install
+
+# 2. run dev server
+npm run dev
+```
+
+App จะรันที่ `http://localhost:5173`
 
 ## API Endpoints
 
-| Method | Path               | Auth | Description        |
-|--------|--------------------|------|--------------------|
-| GET    | /health            | -    | health check       |
-| POST   | /api/auth/register | -    | สมัครสมาชิก        |
-| POST   | /api/auth/login    | -    | login → JWT token  |
-| GET    | /api/users         | -    | ดู user ทั้งหมด    |
-| GET    | /api/users/:id     | -    | ดู user ตาม ID    |
-| GET    | /api/me            | JWT  | ดูข้อมูลตัวเอง     |
-| PUT    | /api/users/:id     | JWT  | แก้ไข user         |
-| DELETE | /api/users/:id     | JWT  | ลบ user            |
-
-## ตัวอย่าง Request
-
-```bash
-# Register
-curl -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Nuthipong","email":"n@mail.com","password":"123456"}'
-
-# Login → copy token ที่ได้
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"n@mail.com","password":"123456"}'
-
-# Get me (ใส่ token)
-curl http://localhost:8080/api/me \
-  -H "Authorization: Bearer <token>"
-```
-
-## Dependencies
-- [Fiber](https://gofiber.io/) — HTTP framework
-- [GORM](https://gorm.io/) — ORM
-- [SQLite driver](https://github.com/gorm-io/sqlite) — local DB ไม่ต้องติดตั้งอะไร
-- [jwt](https://github.com/golang-jwt/jwt) — JWT
-- [bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt) — hash password
-- [godotenv](https://github.com/joho/godotenv) — .env loader
+| Method | Path                      | Auth | Description           |
+|--------|---------------------------|------|-----------------------|
+| GET    | /health                   | -    | health check          |
+| POST   | /api/auth/register        | -    | สมัครสมาชิก           |
+| POST   | /api/auth/login           | -    | login → JWT token     |
+| GET    | /api/users                | JWT  | ดู user ทั้งหมด       |
+| GET    | /api/users/:id            | JWT  | ดู user ตาม ID        |
+| GET    | /api/me                   | JWT  | ดูข้อมูลตัวเอง        |
+| PUT    | /api/users/:id            | JWT  | แก้ไข user            |
+| DELETE | /api/users/:id            | JWT  | ลบ user               |
+| GET    | /api/employees            | JWT  | จัดการพนักงาน         |
+| GET    | /api/inventory            | JWT  | จัดการสินค้าคงคลัง    |
+| GET    | /api/sales                | JWT  | จัดการการขาย          |
+| GET    | /api/purchases            | JWT  | จัดการการซื้อ         |
