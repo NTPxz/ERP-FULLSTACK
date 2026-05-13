@@ -91,7 +91,7 @@ func (h *UserHandler) Login(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": err.Error()})
 	}
-	return c.JSON(fiber.Map{"token": token})
+	return respondOK(c, fiber.Map{"token": token})
 }
 
 // Me godoc
