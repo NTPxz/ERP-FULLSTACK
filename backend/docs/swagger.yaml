@@ -1,0 +1,2055 @@
+basePath: /api
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  model.Category:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  model.CreateCategoryRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  model.CreateCustomerRequest:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      credit_limit:
+        type: number
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  model.CreateDepartmentRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  model.CreateEmployeeRequest:
+    properties:
+      department_id:
+        type: integer
+      email:
+        type: string
+      employee_code:
+        type: string
+      hire_date:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      position_id:
+        type: integer
+      salary:
+        type: number
+      status:
+        $ref: '#/definitions/model.EmployeeStatus'
+    required:
+    - department_id
+    - email
+    - employee_code
+    - name
+    - position_id
+    type: object
+  model.CreatePositionRequest:
+    properties:
+      department_id:
+        type: integer
+      max_salary:
+        type: number
+      min_salary:
+        type: number
+      title:
+        type: string
+    required:
+    - department_id
+    - title
+    type: object
+  model.CreateProductRequest:
+    properties:
+      category_id:
+        type: integer
+      cost_price:
+        type: number
+      description:
+        type: string
+      name:
+        type: string
+      reorder_level:
+        type: number
+      sale_price:
+        type: number
+      sku:
+        type: string
+      unit:
+        type: string
+    required:
+    - category_id
+    - name
+    - sale_price
+    - sku
+    type: object
+  model.CreatePurchaseOrderRequest:
+    properties:
+      expected_date:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/model.PurchaseOrderItemRequest'
+        minItems: 1
+        type: array
+      note:
+        type: string
+      order_date:
+        type: string
+      supplier_id:
+        type: integer
+    required:
+    - items
+    - supplier_id
+    type: object
+  model.CreateSalesOrderRequest:
+    properties:
+      customer_id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/model.SalesOrderItemRequest'
+        minItems: 1
+        type: array
+      note:
+        type: string
+      order_date:
+        type: string
+    required:
+    - customer_id
+    - items
+    type: object
+  model.CreateSupplierRequest:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      payment_terms:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+  model.Customer:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      createdAt:
+        type: string
+      credit_limit:
+        type: number
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Department:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      employees:
+        items:
+          $ref: '#/definitions/model.Employee'
+        type: array
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Employee:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        $ref: '#/definitions/model.Department'
+      department_id:
+        type: integer
+      email:
+        type: string
+      employee_code:
+        type: string
+      hire_date:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      position:
+        $ref: '#/definitions/model.Position'
+      position_id:
+        type: integer
+      salary:
+        type: number
+      status:
+        $ref: '#/definitions/model.EmployeeStatus'
+      updatedAt:
+        type: string
+    type: object
+  model.EmployeeStatus:
+    enum:
+    - active
+    - inactive
+    type: string
+    x-enum-varnames:
+    - EmployeeActive
+    - EmployeeInactive
+  model.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  model.Position:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        $ref: '#/definitions/model.Department'
+      department_id:
+        type: integer
+      id:
+        type: integer
+      max_salary:
+        type: number
+      min_salary:
+        type: number
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.Product:
+    properties:
+      category:
+        $ref: '#/definitions/model.Category'
+      category_id:
+        type: integer
+      cost_price:
+        type: number
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      reorder_level:
+        type: number
+      sale_price:
+        type: number
+      sku:
+        type: string
+      stock_quantity:
+        type: number
+      unit:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.PurchaseOrder:
+    properties:
+      created_by:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      expected_date:
+        type: string
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/model.PurchaseOrderItem'
+        type: array
+      note:
+        type: string
+      order_date:
+        type: string
+      po_no:
+        type: string
+      status:
+        $ref: '#/definitions/model.PurchaseOrderStatus'
+      supplier:
+        $ref: '#/definitions/model.Supplier'
+      supplier_id:
+        type: integer
+      total_amount:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  model.PurchaseOrderItem:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/model.Product'
+      product_id:
+        type: integer
+      purchase_order_id:
+        type: integer
+      quantity:
+        type: number
+      received_qty:
+        type: number
+      subtotal:
+        type: number
+      unit_price:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  model.PurchaseOrderItemRequest:
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        type: number
+      unit_price:
+        type: number
+    required:
+    - product_id
+    - quantity
+    - unit_price
+    type: object
+  model.PurchaseOrderStatus:
+    enum:
+    - draft
+    - sent
+    - received
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - PODraft
+    - POSent
+    - POReceived
+    - POCancelled
+  model.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  model.SalesOrder:
+    properties:
+      created_by:
+        type: integer
+      createdAt:
+        type: string
+      customer:
+        $ref: '#/definitions/model.Customer'
+      customer_id:
+        type: integer
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/model.SalesOrderItem'
+        type: array
+      note:
+        type: string
+      order_date:
+        type: string
+      order_no:
+        type: string
+      status:
+        $ref: '#/definitions/model.SalesOrderStatus'
+      total_amount:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  model.SalesOrderItem:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      discount:
+        type: number
+      id:
+        type: integer
+      product:
+        $ref: '#/definitions/model.Product'
+      product_id:
+        type: integer
+      quantity:
+        type: number
+      sales_order_id:
+        type: integer
+      subtotal:
+        type: number
+      unit_price:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  model.SalesOrderItemRequest:
+    properties:
+      discount:
+        type: number
+      product_id:
+        type: integer
+      quantity:
+        type: number
+      unit_price:
+        type: number
+    required:
+    - product_id
+    - quantity
+    - unit_price
+    type: object
+  model.SalesOrderStatus:
+    enum:
+    - draft
+    - confirmed
+    - completed
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - SODraft
+    - SOConfirmed
+    - SOCompleted
+    - SOCancelled
+  model.StockAdjustRequest:
+    properties:
+      note:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: number
+    required:
+    - product_id
+    - quantity
+    type: object
+  model.StockMovement:
+    properties:
+      created_by:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      note:
+        type: string
+      product:
+        $ref: '#/definitions/model.Product'
+      product_id:
+        type: integer
+      quantity:
+        type: number
+      reference_id:
+        type: integer
+      reference_type:
+        type: string
+      type:
+        $ref: '#/definitions/model.StockMovementType'
+      updatedAt:
+        type: string
+    type: object
+  model.StockMovementType:
+    enum:
+    - in
+    - out
+    - adjust
+    type: string
+    x-enum-varnames:
+    - StockIn
+    - StockOut
+    - StockAdjust
+  model.Supplier:
+    properties:
+      address:
+        type: string
+      code:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      payment_terms:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  model.UpdateCustomerRequest:
+    properties:
+      address:
+        type: string
+      credit_limit:
+        type: number
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+    type: object
+  model.UpdateEmployeeRequest:
+    properties:
+      department_id:
+        type: integer
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      position_id:
+        type: integer
+      salary:
+        type: number
+      status:
+        $ref: '#/definitions/model.EmployeeStatus'
+    type: object
+  model.UpdateProductRequest:
+    properties:
+      category_id:
+        type: integer
+      cost_price:
+        type: number
+      description:
+        type: string
+      name:
+        type: string
+      reorder_level:
+        type: number
+      sale_price:
+        type: number
+      unit:
+        type: string
+    type: object
+  model.UpdatePurchaseOrderStatusRequest:
+    properties:
+      status:
+        $ref: '#/definitions/model.PurchaseOrderStatus'
+    required:
+    - status
+    type: object
+  model.UpdateSalesOrderStatusRequest:
+    properties:
+      status:
+        $ref: '#/definitions/model.SalesOrderStatus'
+    required:
+    - status
+    type: object
+  model.UpdateSupplierRequest:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      payment_terms:
+        type: string
+      phone:
+        type: string
+      tax_id:
+        type: string
+    type: object
+  model.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+    type: object
+  model.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: ERP System — HR, Inventory, Sales, Purchase with JWT Authentication
+  title: Go ERP API
+  version: "2.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate and receive a JWT token
+      parameters:
+      - description: Login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: invalid credentials
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: Register payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.User'
+            type: object
+        "400":
+          description: validation error or email exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register new user
+      tags:
+      - auth
+  /categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Category'
+              type: array
+            type: object
+      summary: List categories
+      tags:
+      - inventory
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Category data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Category'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create category
+      tags:
+      - inventory
+  /customers:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Customer'
+              type: array
+            type: object
+      summary: List customers
+      tags:
+      - sales
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Customer data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Customer'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create customer
+      tags:
+      - sales
+  /customers/{id}:
+    delete:
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete customer
+      tags:
+      - sales
+    get:
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Customer'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get customer
+      tags:
+      - sales
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Customer data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Customer'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update customer
+      tags:
+      - sales
+  /departments:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Department'
+              type: array
+            type: object
+      summary: List departments
+      tags:
+      - hr
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Department data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateDepartmentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Department'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create department
+      tags:
+      - hr
+  /departments/{id}:
+    delete:
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete department
+      tags:
+      - hr
+    get:
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Department'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get department
+      tags:
+      - hr
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Department data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateDepartmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Department'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update department
+      tags:
+      - hr
+  /employees:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Employee'
+              type: array
+            type: object
+      summary: List employees
+      tags:
+      - hr
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Employee data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateEmployeeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Employee'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create employee
+      tags:
+      - hr
+  /employees/{id}:
+    delete:
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete employee
+      tags:
+      - hr
+    get:
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Employee'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get employee
+      tags:
+      - hr
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Employee data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateEmployeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Employee'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update employee
+      tags:
+      - hr
+  /me:
+    get:
+      description: Get profile of the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.User'
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: user not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get current user
+      tags:
+      - auth
+  /positions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Position'
+              type: array
+            type: object
+      summary: List positions
+      tags:
+      - hr
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Position data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePositionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Position'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create position
+      tags:
+      - hr
+  /products:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Product'
+              type: array
+            type: object
+      summary: List products
+      tags:
+      - inventory
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Product'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create product
+      tags:
+      - inventory
+  /products/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete product
+      tags:
+      - inventory
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Product'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get product
+      tags:
+      - inventory
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Product data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Product'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update product
+      tags:
+      - inventory
+  /products/{id}/movements:
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.StockMovement'
+              type: array
+            type: object
+      summary: Get stock movements for a product
+      tags:
+      - inventory
+  /purchase-orders:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.PurchaseOrder'
+              type: array
+            type: object
+      summary: List purchase orders
+      tags:
+      - purchase
+    post:
+      consumes:
+      - application/json
+      description: Creates a draft PO. Use /receive to receive goods and update stock.
+      parameters:
+      - description: PO data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreatePurchaseOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.PurchaseOrder'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create purchase order
+      tags:
+      - purchase
+  /purchase-orders/{id}:
+    delete:
+      description: Only draft orders can be deleted
+      parameters:
+      - description: PO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete purchase order
+      tags:
+      - purchase
+    get:
+      parameters:
+      - description: PO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.PurchaseOrder'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get purchase order
+      tags:
+      - purchase
+  /purchase-orders/{id}/receive:
+    post:
+      description: Marks PO as received and automatically increases stock for all
+        items
+      parameters:
+      - description: PO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.PurchaseOrder'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Receive goods from PO
+      tags:
+      - purchase
+  /purchase-orders/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: 'Valid values: sent, cancelled (use /receive endpoint to mark as
+        received)'
+      parameters:
+      - description: PO ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New status
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdatePurchaseOrderStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.PurchaseOrder'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update PO status
+      tags:
+      - purchase
+  /sales-orders:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.SalesOrder'
+              type: array
+            type: object
+      summary: List sales orders
+      tags:
+      - sales
+    post:
+      consumes:
+      - application/json
+      description: Creates a draft sales order with line items. Confirm to deduct
+        stock.
+      parameters:
+      - description: Order data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateSalesOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.SalesOrder'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create sales order
+      tags:
+      - sales
+  /sales-orders/{id}:
+    delete:
+      description: Only draft orders can be deleted
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete sales order
+      tags:
+      - sales
+    get:
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.SalesOrder'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get sales order
+      tags:
+      - sales
+  /sales-orders/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: 'Valid transitions: draft→confirmed (deducts stock), confirmed→completed,
+        any→cancelled'
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: New status
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateSalesOrderStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.SalesOrder'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update sales order status
+      tags:
+      - sales
+  /stock/adjust:
+    post:
+      consumes:
+      - application/json
+      description: Adjust stock quantity with an audit trail entry
+      parameters:
+      - description: Adjustment data (positive=add, negative=remove)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.StockAdjustRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Manual stock adjustment
+      tags:
+      - inventory
+  /suppliers:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.Supplier'
+              type: array
+            type: object
+      summary: List suppliers
+      tags:
+      - purchase
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Supplier data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateSupplierRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Supplier'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create supplier
+      tags:
+      - purchase
+  /suppliers/{id}:
+    delete:
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete supplier
+      tags:
+      - purchase
+    get:
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Supplier'
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get supplier
+      tags:
+      - purchase
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Supplier data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateSupplierRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.Supplier'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update supplier
+      tags:
+      - purchase
+  /users:
+    get:
+      description: Get all users in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: list of users
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.User'
+              type: array
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all users
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: user not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - users
+    get:
+      description: Get a single user by their ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.User'
+            type: object
+        "400":
+          description: invalid id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: user not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update name or email of an existing user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              $ref: '#/definitions/model.User'
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: user not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: 'Enter: Bearer <your-token>'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

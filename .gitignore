@@ -1,0 +1,17 @@
+# AI / Claude tools
+.claude/
+.superpowers/
+
+# Environment
+.env
+*.db
+
+# IDE
+.idea/
+
+# Backend
+backend/tmp/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
